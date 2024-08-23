@@ -28,7 +28,10 @@ Use the following instructions to compile the [main script](main.cpp):
 ```
 mkdir build && cd build
 cmake ..
+
+make
 ```
+<image align="center" src="make_process.png">
 
 ### Testing on an image
 
@@ -39,11 +42,4 @@ If the compilation succeded a binary file called RetinaCpp will be generated int
 ```
 
 where **PATH_TO_IMAGE** should be replaced with a path to an image file.
-
-## Results
-
-Bellow there is an example of a detection result provided by this current implementation.
-
-<image align="center" src="det.jpg">
-
 

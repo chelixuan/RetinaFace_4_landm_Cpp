@@ -20,13 +20,19 @@ void drawLandmarks(cv::Mat &image, Grid<float> grid){
         cv::circle(image, cv::Point(grid(7,i), grid(8,i)), 2, cv::Scalar(0, 255, 255), -1);
         cv::circle(image, cv::Point(grid(9,i), grid(10,i)), 2, cv::Scalar(255, 0, 255), -1);
         cv::circle(image, cv::Point(grid(11,i), grid(12,i)), 2, cv::Scalar(0, 255, 0), -1);
-        cv::circle(image, cv::Point(grid(13,i), grid(14,i)), 2, cv::Scalar(255, 0, 0), -1);
+        // clx 
+        // cv::circle(image, cv::Point(grid(13,i), grid(14,i)), 2, cv::Scalar(255, 0, 0), -1);
     }
 }
 
 int main(int argc, char** argv) {
     cout << "Instantiating Model Object" << endl;
-    RetinaModel model("../model/retinaface_dynamic.onnx");
+    // RetinaModel model("../model/retinaface_dynamic.onnx");
+
+    // clx --------------------------------------------------------
+    RetinaModel model("../model/clx_tag_mobilenet.onnx");
+    // ------------------------------------------------------------
+
     string image_path;
     float scale = 0.0;
     cv::Mat im;
@@ -44,6 +50,9 @@ int main(int argc, char** argv) {
     cout << "Reading Image: " << argv[1] << endl;
     image_path = argv[1];
     im = cv::imread(image_path);
+
+    // cv::resize(im, im, cv::Size(640, 480));
+    // cv::Mat img = im.clone();
 
     // cout << model << endl;
 

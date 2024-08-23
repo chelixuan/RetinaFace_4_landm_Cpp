@@ -111,7 +111,8 @@ template<typename T> static Grid<T> decode_landmarks(Grid<T> land, Grid<T> ancho
             anchors.getSubset(2,0) + land.getIntervalSubset(gridPoint(2,0),gridPoint(4,-1)) * cfg.variance[0] * anchors.getReverseSubset(2,0),
             anchors.getSubset(2,0) + land.getIntervalSubset(gridPoint(4,0),gridPoint(6,-1)) * cfg.variance[0] * anchors.getReverseSubset(2,0),
             anchors.getSubset(2,0) + land.getIntervalSubset(gridPoint(6,0),gridPoint(8,-1)) * cfg.variance[0] * anchors.getReverseSubset(2,0),
-            anchors.getSubset(2,0) + land.getIntervalSubset(gridPoint(8,0),gridPoint(10,-1)) * cfg.variance[0] * anchors.getReverseSubset(2,0),
+            // clx
+            // anchors.getSubset(2,0) + land.getIntervalSubset(gridPoint(8,0),gridPoint(10,-1)) * cfg.variance[0] * anchors.getReverseSubset(2,0),
         }));
     } catch (const char *msg){
         std::cout << msg << " (decode_landmarks)" << std::endl;
@@ -233,9 +234,16 @@ Grid<float> outputPostProcessing(std::vector<Grid<float>>tensors, Config_Data cf
     else{
         float w = static_cast<float>(image_size.width);
         float h = static_cast<float>(image_size.height);
-        std::vector<float> scale({w,h,w,h,w,h,w,h,w,h});
-        Grid<float> sgrid(10,1);
-        sgrid.setData(scale.data(),10);
+        // std::vector<float> scale({w,h,w,h,w,h,w,h,w,h});
+        // Grid<float> sgrid(10,1);
+        // sgrid.setData(scale.data(),10);
+        
+        // clx -----------------------------------------------------------
+        std::vector<float> scale({w,h,w,h,w,h,w,h});
+        Grid<float> sgrid(8,1);
+        sgrid.setData(scale.data(),8);
+        // ---------------------------------------------------------------
+        
         landmarks.mul(sgrid);
     }
 
@@ -244,7 +252,11 @@ Grid<float> outputPostProcessing(std::vector<Grid<float>>tensors, Config_Data cf
     // os.close();
 
     std::vector<int> inds = scores.where([conf_th](float value) -> bool { return value > conf_th; });
-    if(!inds.size()) return Grid<float>(15,0);
+    // if(!inds.size()) return Grid<float>(15,0);
+
+    // clx -------------------------------------------------------------
+    if(!inds.size()) return Grid<float>(13,0);
+    // -----------------------------------------------------------------
 
     boxes = boxes[inds];
     scores = scores[inds];
