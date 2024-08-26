@@ -30,7 +30,8 @@ int main(int argc, char** argv) {
     // RetinaModel model("../model/retinaface_dynamic.onnx");
 
     // clx --------------------------------------------------------
-    RetinaModel model("../model/clx_tag_mobilenet.onnx");
+    // RetinaModel model("../model/clx_tag_mobilenet.onnx");
+    RetinaModel model("../model/raw_mobilenet0.25_Final_sim.onnx");
     // ------------------------------------------------------------
 
     string image_path;
@@ -50,8 +51,6 @@ int main(int argc, char** argv) {
     cout << "Reading Image: " << argv[1] << endl;
     image_path = argv[1];
     im = cv::imread(image_path);
-
-    // cv::resize(im, im, cv::Size(640, 480));
     // cv::Mat img = im.clone();
 
     // cout << model << endl;

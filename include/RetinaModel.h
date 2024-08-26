@@ -52,7 +52,8 @@ class RetinaModel{
 
         // void setOptions(GraphOptimizationLevel opt_level, int threads = 0);
         // int getInference(cv::Mat &image, Grid<float> &output, bool resize = true, size_t img_size = 640);
-        int getInference(cv::Mat &image, Grid<float> &output, bool resize = true, size_t img_width=640, size_t img_height=480);
+        // int getInference(cv::Mat &image, Grid<float> &output, bool resize = true, size_t img_width=640, size_t img_height=480);
+        int getInference(cv::Mat &image, Grid<float> &output, bool resize = true, size_t img_width=1280, size_t img_height=720);
 
         bool isModelInitialized();
 

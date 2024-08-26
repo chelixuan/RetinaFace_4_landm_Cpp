@@ -182,6 +182,10 @@ int RetinaModel::getInference(cv::Mat &image, Grid<float> &output, bool resize, 
         float* data = output_tensor[i].GetTensorMutableData<float>();
         size_t data_size = tensor_dim[1]*tensor_dim[2];
         out_tensors.back().setData(data, data_size);
+
+        // clx
+        // std::cout << "data: " << data << std::endl;
+        // std::cout << "data_size: " << data_size << std::endl;
     }
 
     Config_Data cfg = get_R50_config();

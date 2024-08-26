@@ -105,18 +105,30 @@ template<typename T> static Grid<T> decode(Grid<T> data, Grid<T> anchors, Config
 
 template<typename T> static Grid<T> decode_landmarks(Grid<T> land, Grid<T> anchors, Config_Data cfg){
     Grid<T> result;
-    try{
-        result = GridFunc::concatenateNGrids(std::vector<Grid<T>>({
-            anchors.getSubset(2,0) + land.getSubset(2,0) * cfg.variance[0] * anchors.getReverseSubset(2,0),
+    // clx
+    std::cout << "result : " << result << std::endl;
+
+    // try{
+    //     result = GridFunc::concatenateNGrids(std::vector<Grid<T>>({
+    //         anchors.getSubset(2,0) + land.getSubset(2,0) * cfg.variance[0] * anchors.getReverseSubset(2,0),
+    //         anchors.getSubset(2,0) + land.getIntervalSubset(gridPoint(2,0),gridPoint(4,-1)) * cfg.variance[0] * anchors.getReverseSubset(2,0),
+    //         anchors.getSubset(2,0) + land.getIntervalSubset(gridPoint(4,0),gridPoint(6,-1)) * cfg.variance[0] * anchors.getReverseSubset(2,0),
+    //         anchors.getSubset(2,0) + land.getIntervalSubset(gridPoint(6,0),gridPoint(8,-1)) * cfg.variance[0] * anchors.getReverseSubset(2,0),
+    //         // clx
+    //         // anchors.getSubset(2,0) + land.getIntervalSubset(gridPoint(8,0),gridPoint(10,-1)) * cfg.variance[0] * anchors.getReverseSubset(2,0),
+    //     }));
+    // } catch (const char *msg){
+    //     std::cout << msg << " (decode_landmarks)" << std::endl;
+    // }
+
+    result = GridFunc::concatenateNGrids(std::vector<Grid<T>>({
+            anchors.getSubset(2,0) + land.getIntervalSubset(gridPoint(0,0),gridPoint(2,-1)) * cfg.variance[0] * anchors.getReverseSubset(2,0),
             anchors.getSubset(2,0) + land.getIntervalSubset(gridPoint(2,0),gridPoint(4,-1)) * cfg.variance[0] * anchors.getReverseSubset(2,0),
             anchors.getSubset(2,0) + land.getIntervalSubset(gridPoint(4,0),gridPoint(6,-1)) * cfg.variance[0] * anchors.getReverseSubset(2,0),
             anchors.getSubset(2,0) + land.getIntervalSubset(gridPoint(6,0),gridPoint(8,-1)) * cfg.variance[0] * anchors.getReverseSubset(2,0),
             // clx
             // anchors.getSubset(2,0) + land.getIntervalSubset(gridPoint(8,0),gridPoint(10,-1)) * cfg.variance[0] * anchors.getReverseSubset(2,0),
         }));
-    } catch (const char *msg){
-        std::cout << msg << " (decode_landmarks)" << std::endl;
-    }
     return result;
 }
 
@@ -177,8 +189,18 @@ template<typename T> Grid<T> anchors_grid(Config_Data cfg, cv::Size image_size){
     for(size_t i = 0; i < 3; i++){
         std::vector<int> min_sz = cfg.min_sizes[i];
         
-        int fy = std::ceil(image_size.height/cfg.steps[i]);
-        int fx = std::ceil(image_size.width/cfg.steps[i]);
+        // int fy = std::ceil(image_size.height/cfg.steps[i]);
+        // int fx = std::ceil(image_size.width/cfg.steps[i]);
+
+        int fy = static_cast<int>(std::ceil(1.0*image_size.height/cfg.steps[i]));
+        int fx = static_cast<int>(std::ceil(1.0*image_size.width/cfg.steps[i]));
+
+        // clx
+        printf("img_size.height : %d \n", image_size.height);
+        printf("img_size.width : %d \n", image_size.width);
+        printf("cfg.steps[i] = %d \n", cfg.steps[i]);
+        printf("fy = %d \n", fy);
+        printf("fx = %d \n", fx);
 
         for(size_t y = 0; y < fy; y++){
             for(size_t x = 0; x < fx; x++){
@@ -210,8 +232,14 @@ template<typename T> Grid<T> anchors_grid(Config_Data cfg, cv::Size image_size){
 Grid<float> outputPostProcessing(std::vector<Grid<float>>tensors, Config_Data cfg, bool debug, float det_scale, cv::Size image_size, float conf_th, int top_k, int keep_top_k){
     Grid<float> anchors = anchors_grid<float>(cfg, image_size);
     // std::cout << anchors << std::endl;
+    // clx
+    std::cout << "anchors: " << anchors << std::endl;
 
     Grid<float> boxes = decode(tensors[0], anchors, cfg);
+
+    // clx
+    // std::cout << "boxes: " << boxes << std::endl;
+
     if(image_size.height == image_size.width)
         boxes *= image_size.height;
     else{
@@ -223,9 +251,17 @@ Grid<float> outputPostProcessing(std::vector<Grid<float>>tensors, Config_Data cf
         boxes.mul(sgrid);
     }
 
+    // clx
+    // std::cout << "boxes_reshape: " << boxes << std::endl;
+    // std::cout << "tensors[1]: " << tensors[1] << std::endl;
+    std::cout << "tensors[2]: " << tensors[2] << std::endl;
+
     Grid<float> scores = tensors[1].getIntervalSubset(gridPoint(1,0), gridPoint(-1,-1));
 
     Grid<float> landmarks = decode_landmarks(tensors[2], anchors, cfg);
+
+    // clx
+    std::cout << "landmarks : " << landmarks << std::endl;
 
     // std::cout << anchors << std::endl << boxes << std::endl << scores << std::endl << landmarks << std::endl;
 
