@@ -46,7 +46,7 @@ static std::ostream& operator<<(std::ostream& os, const std::vector<int> &v){
 //     cv::transpose(c_hw, dst_1d);
 // }
 
-void inputPreProcessing(cv::Mat &im, float &det_scale, bool reshape, int img_size){
+void inputPreProcessing(cv::Mat &im, float &det_scale, bool reshape, int img_width, int img_height){
 
     im.convertTo(im, CV_32FC3);
 
@@ -56,22 +56,22 @@ void inputPreProcessing(cv::Mat &im, float &det_scale, bool reshape, int img_siz
 #endif
 
     if(reshape){
-        cv::Mat det_im = cv::Mat::zeros(cv::Size(img_size,img_size), CV_32FC3);
+        cv::Mat det_im = cv::Mat::zeros(cv::Size(img_width, img_height), CV_32FC3);
         cv::Mat resized_img;
 
-        int new_height, new_width;
-        float im_ratio = float(im.rows)/float(im.cols);
-        if(im_ratio > 1){
-            new_height = img_size;
-            new_width = int(new_height / im_ratio);
-        } else {
-            new_width = img_size;
-            new_height = int(new_width * im_ratio);
-        }
+        // int new_height, new_width;
+        // float im_ratio = float(im.rows)/float(im.cols);
+        // if(im_ratio > 1){
+        //     new_height = img_size;
+        //     new_width = int(new_height / im_ratio);
+        // } else {
+        //     new_width = img_size;
+        //     new_height = int(new_width * im_ratio);
+        // }
 
-        det_scale = (float)(new_height) / (float)(im.rows);
-        cv::resize(im, resized_img, cv::Size(new_width,new_height));
-        resized_img.copyTo(det_im(cv::Rect(0,0,new_width,new_height)));
+        det_scale = (float)(img_height) / (float)(im.rows);
+        cv::resize(im, resized_img, cv::Size(img_width,img_height));
+        resized_img.copyTo(det_im(cv::Rect(0,0,img_width,img_height)));
         im = det_im;
     }
 #if CV_MAJOR_VERSION < 4

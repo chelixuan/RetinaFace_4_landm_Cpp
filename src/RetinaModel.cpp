@@ -126,7 +126,8 @@ void RetinaModel::setModelPath(std::string model_path){ this->model_path = model
 //     this->options.SetIntraOpNumThreads(threads); 
 // }
 
-int RetinaModel::getInference(cv::Mat &image, Grid<float> &output, bool resize, size_t img_size){
+// int RetinaModel::getInference(cv::Mat &image, Grid<float> &output, bool resize, size_t img_size){
+int RetinaModel::getInference(cv::Mat &image, Grid<float> &output, bool resize, size_t img_width, size_t img_height){
     float det_scale = 1.0f;
     cv::Mat input(image);
 
@@ -137,12 +138,12 @@ int RetinaModel::getInference(cv::Mat &image, Grid<float> &output, bool resize, 
     auto memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
 
     if(image.cols <= 640 && image.rows <= 640) resize = false;
-    inputPreProcessing(input, det_scale, resize, img_size);
+    inputPreProcessing(input, det_scale, resize, img_width, img_height);
 
     std::vector<int64_t> dims(this->input_shapes[this->input_names[0]]);
     dims[0] = 1;
-    dims[2] = resize ? img_size : image.rows;
-    dims[3] = resize ? img_size : image.cols;
+    dims[2] = resize ? img_height : image.rows;
+    dims[3] = resize ? img_width : image.cols;
 
     std::cout << "Input Dims: " << dims << std::endl;
 
