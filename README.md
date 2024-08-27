@@ -2,22 +2,17 @@
 
 This is the C++ implementation of the [Retinaface PyTorch](https://github.com/biubug6/Pytorch_Retinaface) model inference.
 
-The Inference Engine used is the [ONNX Runtime](https://onnxruntime.ai/) Framework, and the model is obtained through the PyTorch ONNX export API. A pretrained model is provided in [this path](model/retinaface_dynamic.zip) with dynamic input shape. In the current implementation, images with any dimension above 640px are resized to 640x640 letterbox padding, due to anchors decoding limitation.
+### original
+The Inference Engine used is the [ONNX Runtime](https://onnxruntime.ai/) Framework, and the model is obtained through the PyTorch ONNX export API. A pretrained model is provided in [this path](model/retinaface_dynamic.zip) with dynamic input shape. 
 
-## Dependencies
-- OpenCV 3 or higher
+In the [luisfmnunes/RetinaFacesCpp](https://github.com/luisfmnunes/RetinaFacesCpp) implementation, images with any dimension above 640px are resized to 640x640 letterbox padding, due to anchors decoding limitation.
+
+### clx modified
+In the current implementation, images with any dimension will be resized to 1280*720(or 640*480 with mini input shape onnx model). The pretrained onnx model is provided in [this path](model/raw_mobilenet0.25_Final_sim.onnx)  with fixed input shape.
 
 ## Usage
 
 Bellow are the usage instructions
-
-### Unzip Pretrained Model
-
-If there isn't an intent to provide a custom trained model, the first step consists in extracting the [pretrained model](model/retinaface_dynamic.zip). The following command called from the root path of this repo unzips the model.
-
-```
-unzip model/retinaface_dynamic.zip -d model
-```
 
 ### Compiling the main example
 
