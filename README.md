@@ -2,6 +2,7 @@
 
 This is the C++ implementation of the [Retinaface PyTorch](https://github.com/biubug6/Pytorch_Retinaface) model inference.
 
+# 1. Modified 
 ### original
 The Inference Engine used is the [ONNX Runtime](https://onnxruntime.ai/) Framework, and the model is obtained through the PyTorch ONNX export API. A pretrained model is provided in [this path](model/retinaface_dynamic.zip) with dynamic input shape. 
 
@@ -10,7 +11,7 @@ In the [luisfmnunes/RetinaFacesCpp](https://github.com/luisfmnunes/RetinaFacesCp
 ### clx modified
 In the current implementation, images with any dimension will be resized to 1280*720(or 640*480 with mini input shape onnx model). The pretrained onnx model is provided in [this path](model/raw_mobilenet0.25_Final_sim.onnx)  with fixed input shape.
 
-## Usage
+# 2. Usage
 
 Bellow are the usage instructions
 
@@ -28,7 +29,7 @@ make
 ```
 <image align="center" src="make_process.png">
 
-### Testing on an image
+# 3. Testing on an image
 
 If the compilation succeded a binary file called RetinaCpp will be generated into the build directory, which can be used to detect faces in an image using the following structure:
 
